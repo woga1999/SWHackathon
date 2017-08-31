@@ -1,11 +1,11 @@
 package com.example.woga1.nfcaccount;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
