@@ -1,5 +1,6 @@
 package com.example.woga1.nfcaccount;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -40,9 +41,9 @@ public class MenuActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(getApplicationContext(),"클릭할게 있다",Toast.LENGTH_SHORT).show();
                     Log.e("position", "빈칸아님");
-
+                    startActivity(new Intent(MenuActivity.this, ProductPurchaseContent.class));
                 }
-                
+
             }
         }) ;
     }

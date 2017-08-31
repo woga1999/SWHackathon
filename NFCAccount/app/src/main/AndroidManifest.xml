@@ -23,7 +23,10 @@
         <activity android:name=".AccountTransfer" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProductPurchaseContent" />
-        <activity android:name=".MenuActivity" />
+        <activity
+            android:name=".MenuActivity"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
         <activity android:name=".LoginActivity"></activity>
     </application>
 
