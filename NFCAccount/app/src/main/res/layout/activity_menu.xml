@@ -37,7 +37,25 @@
             android:textSize="15dp" />
 
     </LinearLayout>
+    <EditText android:id="@+id/note"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:gravity="top"
+        android:hint="태그에 기록할 문자 입력하세요">
 
+    </EditText>
+
+    <TextView android:id="@+id/checkString"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:gravity="top"
+        android:text="///"/>
+
+    <TextView
+        android:id="@+id/log"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:text="///"/>
     <ListView
         android:id="@+id/purchaseList"
         android:layout_width="match_parent"

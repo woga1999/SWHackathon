@@ -1,26 +1,67 @@
 package com.example.woga1.nfcaccount;
 
+import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skp.Tmap.TMapGpsManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MenuActivity extends AppCompatActivity {
 
+    private static final String TAG = "stickynotes";
+    private boolean mResumed = false;
+    private boolean mWriteMode = false;
+    NfcAdapter mNfcAdapter;
+    EditText mNote;
+    Intent mIntent;
+    PendingIntent mNfcPendingIntent;
+    IntentFilter[] mWriteTagFilters;
+    IntentFilter[] mNdefExchangeFilters;
+
+
+    String sellerName;
+    String accountNumber;
+    String accountBank;
+    String shopCategory;
+    Date curDate = new Date();
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+    String DateToStr = format.format(curDate);
+    Location shopLocation;
+    TextView test;
+    Editable text;
     TMapGpsManager tmapgps = null;
+
+    private final String TOSS_PACKAGE_NAME = "viva.republica.toss";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +107,218 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         }) ;
+
+        //NFC
+        test = (TextView)findViewById(R.id.checkString);
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
+        mNote = (EditText) findViewById(R.id.note);
+        mNote.addTextChangedListener(mTextWatcher);
+        mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        try {
+            ndefDetected.addDataType("text/plain");
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            mNdefExchangeFilters = new IntentFilter[] { ndefDetected };
+        }
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        mWriteTagFilters = new IntentFilter[] { tagDetected };
+        //
+
+
+    }
+
+    public boolean isTossInstalled(Context context) {
+        return context.getPackageManager().getLaunchIntentForPackage(TOSS_PACKAGE_NAME) != null;
+    }
+    public void launchForPayment(Context context) {
+        if (isTossInstalled(context)) {
+            //Toss 앱의 설치 유무를 확인하고, 앱이 설치되어 있다면 토스의 main activity 를 실행하는 Intent를 반환합니다.
+            Intent tossLauncherIntent = context.getPackageManager().getLaunchIntentForPackage(TOSS_PACKAGE_NAME);
+            context.startActivity(tossLauncherIntent);
+        }
+        else
+        {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + TOSS_PACKAGE_NAME));
+            context.startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mResumed = true;
+//        if (NfcAdapter.ACTION_NDEF_DISCOVERED.contentEquals(getIntent().getAction())) {
+//            NdefMessage[] messages = getNdefMessages(getIntent());
+//            byte[] payload = messages[0].getRecords()[0].getPayload();
+//            setNotBody(new String(payload));
+//            setIntent(new Intent());
+//        }
+        enableNdefExchageMode();
+    }
+
+    private NdefMessage[] getNdefMessages(Intent intent) {
+        NdefMessage[] msgs = null;
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action) || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i<rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
+                }
+            }
+            else {
+                byte[] empty = new byte[] {};
+                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNCHANGED,
+                        empty, empty, empty);
+                NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
+                msgs = new NdefMessage[] { msg };
+            }
+        } else {
+            Log.d(TAG, "알려지지 않은 인텐트.");
+            finish();
+        }
+        return msgs;
+    }
+
+    private void setNotBody(String string) {  //읽은건 mNote 에 적혀 있다. // text는 앞에 3글자를 지운것.
+        text = mNote.getText();
+        text.clear();
+        text.append(string);
+        text.delete(0,3);
+        SeparateInformation(text);
+    }
+
+    private void enableNdefExchageMode() {
+        mNfcAdapter.enableForegroundNdefPush(MenuActivity.this, getNoteAsNdef());
+        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mNdefExchangeFilters, null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mResumed = false;
+        mNfcAdapter.disableForegroundNdefPush(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (!mWriteMode&&NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            NdefMessage[] msgs = getNdefMessages(intent);
+            PromptForContent(msgs[0]);
+        }
+    }
+
+    private void toast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    private void PromptForContent(final NdefMessage msg) {
+        String body = new String(msg.getRecords()[0].getPayload());
+        setNotBody(body);
+    }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void afterTextChanged(Editable arg0) {
+            if (mResumed) {
+                mNfcAdapter.enableForegroundNdefPush(MenuActivity.this,
+                        getNoteAsNdef());
+            }
+        }
+        @Override
+        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+        }
+        @Override
+        public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+        }
+    };
+    protected NdefMessage getNoteAsNdef() {
+        byte[] textBytes = mNote.getText().toString().getBytes();
+        NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "text/plain".getBytes(), new byte[] {}, textBytes);
+        return new NdefMessage(new NdefRecord[] { textRecord });
+    }
+    protected void enableTagWriteMode() {
+        mWriteMode = true;
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        mWriteTagFilters = new IntentFilter[] { tagDetected };
+        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
+    }
+    private void disableNdefExchangeMode() {
+        mNfcAdapter.disableForegroundNdefPush(this);
+        mNfcAdapter.disableForegroundDispatch(this);
+    }
+    private void disableTagWriteMode() {
+        mWriteMode = false;
+        mNfcAdapter.disableForegroundDispatch(this);
+    }
+    private void enableNdefExchangeMode() {
+        mNfcAdapter.enableForegroundNdefPush(MenuActivity.this, getNoteAsNdef());
+        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,mWriteTagFilters, null);
+    }
+
+
+    private void SeparateInformation(Editable text){   //하나하나 구분해서 출력하는 메소드
+        String[] array = text.toString().split("/");
+//        test = (TextView)findViewById(R.id.checkString);
+        sellerName = array[0];
+        accountNumber = array[1];
+        accountBank = array[2];
+        shopCategory = array[3];
+
+        test.setText(sellerName + " " + accountNumber + " " + accountBank + " " + shopCategory + " " + DateToStr
+                + " " );
+        Toast.makeText(getApplication(),accountNumber,Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder ad = new AlertDialog.Builder(MenuActivity.this);
+
+        ad.setMessage("보내실 금액을 입력하세요.");   // 내용 설정
+
+        final EditText et = new EditText(MenuActivity.this);
+        ad.setView(et);
+
+        // 확인 버튼 설정
+        ad.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+        {
+//            String account = "농협 3560405415773";
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                // Text 값 받아서 로그 남기기
+                String text = et.getText().toString();
+                text = text + "원 " + accountBank + " " +accountNumber;
+
+                if(text.length() != 0)
+                {
+                    ClipData clip = ClipData.newPlainText("text", text);
+
+                    ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                    cm.setPrimaryClip(clip);
+                    launchForPayment(getApplicationContext());
+                }
+
+
+                dialog.dismiss();     //닫기
+                // Event
+            }
+        });
+
+        // 취소 버튼 설정
+        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+
+                dialog.dismiss();     //닫기
+                // Event
+            }
+        });
+
+        // 창 띄우기
+        ad.show();
     }
 
     public Location nowLocation() {
