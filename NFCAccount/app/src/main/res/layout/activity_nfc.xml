@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#1B7EC1">
 
 
-
-    <EditText android:id="@+id/note"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
-        android:hint="태그에 기록할 문자 입력하세요">
-
-    </EditText>
-
-    <TextView android:id="@+id/checkString"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:text="///"/>
-
-    <TextView
-        android:id="@+id/log"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="///"/>
-
-</LinearLayout>
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_marginTop="176dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="보낼 금액을 입력하세요"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="받는 분 (계좌번호 또는 연락처)"/>
+    </LinearLayout>
+</RelativeLayout>

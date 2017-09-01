@@ -45,10 +45,10 @@ public class ProductPurchaseContent extends AppCompatActivity {
         location = getLastKnownLocation();
         tmapview = new TMapView(this);
 //        TMapPoint startPoint = new TMapPoint(location.getLatitude(), location.getLongitude());
-        TMapPoint startPoint = new TMapPoint(37.512702,127.119563);
+        TMapPoint startPoint = new TMapPoint(127.119563,37.512702);
 
 //        tmapview.setLocationPoint(location.getLongitude(), location.getLatitude());
-        tmapview.setLocationPoint(37.512702,127.119563);
+        tmapview.setLocationPoint(127.119563,37.512702);
         tmapview.setTileType(TILETYPE_HDTILE);
         tmapview.setSKPMapApiKey("cad2cc9b-a3d5-3c32-8709-23279b7247f9");
         tmapview.setZoomLevel(14);

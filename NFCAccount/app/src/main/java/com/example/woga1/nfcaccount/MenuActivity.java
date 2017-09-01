@@ -1,8 +1,13 @@
 package com.example.woga1.nfcaccount;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,13 +16,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.skp.Tmap.TMapGpsManager;
+
 public class MenuActivity extends AppCompatActivity {
 
+    TMapGpsManager tmapgps = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        tmapgps = new TMapGpsManager(this);
 //        final String[] sellerName = {"손장원","최종원"};
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
@@ -35,6 +43,10 @@ public class MenuActivity extends AppCompatActivity {
         listViewAdapter.addItem("박효완탕수육","4,200원", "17.08.29 22:14") ;
         listViewAdapter.addItem("감태균탕수육","5,200원", "17.08.28 22:14") ;
         listViewAdapter.addItem("육문수탕수육","6,200원", "17.08.27 22:14") ;
+
+//        Log.e("location", String.valueOf(nowLocation().getLatitude()));
+//        Log.e("location", String.valueOf(nowLocation().getLongitude()));
+
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,5 +66,33 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         }) ;
+    }
+
+    public Location nowLocation() {
+        Location myLocation = null;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+
+            tmapgps = new TMapGpsManager(this);
+            tmapgps.OpenGps();
+            tmapgps.setMinDistance(0);
+            tmapgps.setMinTime(100);
+            tmapgps.setProvider(tmapgps.GPS_PROVIDER);
+            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            myLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (myLocation == null) {
+                myLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if(myLocation != null)
+                {
+                    Log.d("myLocation: ", String.valueOf(myLocation.getLatitude()));
+                }
+            }
+            else if(myLocation != null){
+                Log.d("myLocation: ", String.valueOf(myLocation.getLatitude()));
+            }
+        }
+        return myLocation;
     }
 }
