@@ -21,7 +21,7 @@
             android:layout_weight="1"
             android:background="#1B7EC1"
             android:gravity="center"
-            android:text="손장원님 환영합니다."
+            android:text="최종원님 환영합니다."
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 

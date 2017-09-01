@@ -33,7 +33,9 @@
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".AccountTransfer" />
+        <activity
+            android:name=".AccountTransfer"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProductPurchaseContent" />
         <activity
@@ -47,7 +49,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".NFCActivity" />
-        <activity android:name=".TemporaryActivity" />
         <activity android:name=".CustomChartActivity">
 
         </activity>

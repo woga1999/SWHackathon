@@ -18,7 +18,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="구매정보"
+        android:text="소비자 패턴분석"
         android:textColor="#000000"
         android:background="@null"
         android:textSize="20dp"

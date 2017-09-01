@@ -1,10 +1,7 @@
 package com.example.woga1.nfcaccount;
 
 import android.app.PendingIntent;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -19,7 +16,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,12 +27,12 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.skp.Tmap.TMapGpsManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.woga1.nfcaccount.R.id.logout;
 import static com.example.woga1.nfcaccount.R.id.menu_user;
@@ -65,6 +61,7 @@ public class MenuActivity extends AppCompatActivity {
     TextView test;
     Editable text;
     TMapGpsManager tmapgps = null;
+    final ListviewAdapter listViewAdapter= new ListviewAdapter();
 
     private final String TOSS_PACKAGE_NAME = "viva.republica.toss";
     @Override
@@ -81,35 +78,29 @@ public class MenuActivity extends AppCompatActivity {
 //        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, sellerName) ;
 
         ListView listview = (ListView) findViewById(R.id.purchaseList) ;
-        final ListviewAdapter listViewAdapter = new ListviewAdapter();
-
-        listViewAdapter.addItem("신재혁치킨","3,600원", "17.09.01 00:20") ;
-        listViewAdapter.addItem("최종원떡볶이","3,600원", "17.08.30 20:35") ;
         listview.setAdapter(listViewAdapter) ;
-        listViewAdapter.addItem("박효완탕수육","4,200원", "17.08.29 22:14") ;
-        listViewAdapter.addItem("감태균탕수육","5,200원", "17.08.28 22:14") ;
-        listViewAdapter.addItem("육문수탕수육","6,200원", "17.08.27 22:14") ;
 
-//        Log.e("location", String.valueOf(nowLocation().getLatitude()));
-//        Log.e("location", String.valueOf(nowLocation().getLongitude()));
-
+        listViewAdapter.addItem("강순자","5,300원", "2017.08.31 11:20",1) ;
+        listViewAdapter.addItem("안미화","10,000원", "2017.08.30 08:18",1) ;
+        listViewAdapter.addItem("최성길","7,000원", "2017.08.28 12:14",1) ;
+        listViewAdapter.addItem("육문수","4,500원", "2017.08.24 19:35",1) ;
+        listViewAdapter.addItem("현상소","14,000원", "2017.08.19 22:57",1) ;
+        listViewAdapter.addItem("박효완","4,500원", "2017.08.17 19:35",1) ;
+        listViewAdapter.addItem("정원빈","16,000원", "2017.08.13 16:57",1) ;
+        listViewAdapter.addItem("임미정","4,500원", "2017.08.12 13:35",1) ;
+        listViewAdapter.addItem("이승철","22,000원", "2017.08.07 23:13",1) ;
+        listViewAdapter.addItem("왕제문","14,000원", "2017.08.06 22:40",1) ;
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-//                if(sellerName[position].equals(""))
-                Toast.makeText(getApplicationContext(),listViewAdapter.getItem(position).toString(),Toast.LENGTH_SHORT).show();
                 if(listViewAdapter.getItem(position).equals(""))
                 {
-                    Toast.makeText(getApplicationContext(),"클릭할게 없다",Toast.LENGTH_SHORT).show();
-                    Log.e("position", "빈칸");
                 }
                 else {
-                    Toast.makeText(getApplicationContext(),"클릭할게 있다",Toast.LENGTH_SHORT).show();
-                    Log.e("position", "빈칸아님");
                     startActivity(new Intent(MenuActivity.this, ProductPurchaseContent.class));
-                }
 
+                }
             }
         }) ;
 
@@ -152,12 +143,6 @@ public class MenuActivity extends AppCompatActivity {
                 //로그아웃 버튼
                 startActivity(new Intent(MenuActivity.this, LoginActivity.class));
                 break;
-//            case R.id.menu_logout:
-//                //로그아웃버튼 눌렀을 때
-//                mAuth.signOut();
-//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                startActivity(intent);
-//                break;
 
         }
         return super.onOptionsItemSelected(item);
@@ -184,12 +169,6 @@ public class MenuActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mResumed = true;
-//        if (NfcAdapter.ACTION_NDEF_DISCOVERED.contentEquals(getIntent().getAction())) {
-//            NdefMessage[] messages = getNdefMessages(getIntent());
-//            byte[] payload = messages[0].getRecords()[0].getPayload();
-//            setNotBody(new String(payload));
-//            setIntent(new Intent());
-//        }
         enableNdefExchageMode();
     }
 
@@ -247,9 +226,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    private void toast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-    }
 
     private void PromptForContent(final NdefMessage msg) {
         String body = new String(msg.getRecords()[0].getPayload());
@@ -306,53 +282,23 @@ public class MenuActivity extends AppCompatActivity {
 
         test.setText(sellerName + " " + accountNumber + " " + accountBank + " " + shopCategory + " " + DateToStr
                 + " " );
-        Toast.makeText(getApplication(),accountNumber,Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder ad = new AlertDialog.Builder(MenuActivity.this);
 
-        ad.setMessage("보내실 금액을 입력하세요.");   // 내용 설정
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+        String str_date = df.format(new Date());
 
-        final EditText et = new EditText(MenuActivity.this);
-        ad.setView(et);
+        str_date = str_date.replace('-', '.');
+        str_date = str_date.substring(0,str_date.length()-3);
 
-        // 확인 버튼 설정
-        ad.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-        {
-//            String account = "농협 3560405415773";
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                // Text 값 받아서 로그 남기기
-                String text = et.getText().toString();
-                text = text + "원 " + accountBank + " " +accountNumber;
+        listViewAdapter.addItem("신재혁","1,000원", str_date,0) ;
 
-                if(text.length() != 0)
-                {
-                    ClipData clip = ClipData.newPlainText("text", text);
-
-                    ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-                    cm.setPrimaryClip(clip);
-                    launchForPayment(getApplicationContext());
-                }
+        Intent intent = new Intent(MenuActivity.this, AccountTransfer.class);
+        String accountInformation = accountBank + " " +accountNumber;
+        intent.putExtra("accountInformation", accountInformation);
+        startActivityForResult(intent, 1);
 
 
-                dialog.dismiss();     //닫기
-                // Event
-            }
-        });
 
-        // 취소 버튼 설정
-        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
 
-                dialog.dismiss();     //닫기
-                // Event
-            }
-        });
-
-        // 창 띄우기
-        ad.show();
     }
 
     public Location nowLocation() {

@@ -57,7 +57,7 @@ public class ListviewAdapter  extends BaseAdapter {
         return convertView;
     }
 
-//    public String getSeller(int position){
+    //    public String getSeller(int position){
 //
 ////        return listViewItemList.get()
 //    }
@@ -74,15 +74,20 @@ public class ListviewAdapter  extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String seller, String money, String time) {
+    public void addItem(String seller, String money, String time, int index) {
         List_item item  = new List_item();
 
         item.setSeller(seller);
         item.setMoney(money);
         item.setTime(time);
 
-
-        listViewItemList.add(item);
+        if(index ==0)
+        {
+            listViewItemList.add(0,item);
+        }
+        else {
+            listViewItemList.add(item);
+        }
     }
 
 
