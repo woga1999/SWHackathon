@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MenuActivity">
+
+    <item
+        android:id="@+id/menu_user"
+        android:orderInCategory="100"
+        android:title="사용자 구매패턴"
+        />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:orderInCategory="100"
+        android:title="로그아웃"
+        />
+
+    <!--<item-->
+    <!--android:id="@+id/menu_logout"-->
+    <!--android:orderInCategory="100"-->
+    <!--android:title="로그아웃"/>-->
+
+</menu>

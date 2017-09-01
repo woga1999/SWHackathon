@@ -24,6 +24,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -35,6 +37,9 @@ import com.skp.Tmap.TMapGpsManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.example.woga1.nfcaccount.R.id.logout;
+import static com.example.woga1.nfcaccount.R.id.menu_user;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -127,6 +132,35 @@ public class MenuActivity extends AppCompatActivity {
         //
 
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(Menu.NONE, menu_user, Menu.NONE, "사용자 구매패턴");
+        menu.add(Menu.NONE, logout, Menu.NONE, "로그아웃");
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case menu_user:
+                //사용자 버튼 눌렀을 때
+                startActivity(new Intent(MenuActivity.this, ProductPurchaseContent.class));
+                break;
+            case logout:
+                //로그아웃 버튼
+                startActivity(new Intent(MenuActivity.this, CustomChartActivity.class));
+                break;
+//            case R.id.menu_logout:
+//                //로그아웃버튼 눌렀을 때
+//                mAuth.signOut();
+//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public boolean isTossInstalled(Context context) {

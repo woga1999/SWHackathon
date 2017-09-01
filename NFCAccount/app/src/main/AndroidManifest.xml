@@ -32,13 +32,13 @@
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".AccountTransfer"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".AccountTransfer" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProductPurchaseContent" />
         <activity
             android:name=".MenuActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,8 +46,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NFCActivity"></activity>
-        <activity android:name=".TemporaryActivity"></activity>
+        <activity android:name=".NFCActivity" />
+        <activity android:name=".TemporaryActivity" />
+        <activity android:name=".CustomChartActivity">
+
+        </activity>
     </application>
+
 
 </manifest>
