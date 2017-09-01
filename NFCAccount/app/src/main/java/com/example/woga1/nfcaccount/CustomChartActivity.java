@@ -14,7 +14,7 @@ public class CustomChartActivity extends AppCompatActivity {
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//        getSupportActionBar().setCustomView(R.layout.customanalysisbar);
+        getSupportActionBar().setCustomView(R.layout.custom_analysisbar);
 
     }
 }

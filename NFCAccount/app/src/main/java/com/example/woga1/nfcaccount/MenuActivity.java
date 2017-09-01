@@ -146,11 +146,11 @@ public class MenuActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case menu_user:
                 //사용자 버튼 눌렀을 때
-                startActivity(new Intent(MenuActivity.this, ProductPurchaseContent.class));
+                startActivity(new Intent(MenuActivity.this, CustomChartActivity.class));
                 break;
             case logout:
                 //로그아웃 버튼
-                startActivity(new Intent(MenuActivity.this, CustomChartActivity.class));
+                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
                 break;
 //            case R.id.menu_logout:
 //                //로그아웃버튼 눌렀을 때
