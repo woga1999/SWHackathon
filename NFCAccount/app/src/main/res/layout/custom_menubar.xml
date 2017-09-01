@@ -5,22 +5,32 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:text="Tapay"
-    android:textColor="#000000"
-        android:textStyle="bold"
-    android:id="@+id/mytext"
-    android:textSize="40dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_weight="0.04"-->
-        <!--android:src="@drawable/handleartext" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tapay"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="40dp"
+            android:layout_weight="10"
+            android:id="@+id/mytext"
+            android:gravity="center"
+            android:layout_alignParentTop="true"/>
 
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_weight="0.04"-->
+            <!--android:src="@drawable/handleartext" />-->
+    </RelativeLayout>
 </LinearLayout>
