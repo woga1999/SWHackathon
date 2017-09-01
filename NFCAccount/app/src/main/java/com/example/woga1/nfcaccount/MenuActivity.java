@@ -29,12 +29,12 @@ public class MenuActivity extends AppCompatActivity {
         ListView listview = (ListView) findViewById(R.id.purchaseList) ;
         final ListviewAdapter listViewAdapter = new ListviewAdapter();
 
-        listViewAdapter.addItem("신재혁치킨","3600원", "서울시 광진구 군자동 세종대학교") ;
-        listViewAdapter.addItem("최종원떡볶이","3600원", "서울시 관악구 낙성대 종원이네") ;
+        listViewAdapter.addItem("신재혁치킨","3,600원", "17.09.01 00:20") ;
+        listViewAdapter.addItem("최종원떡볶이","3,600원", "17.08.30 20:35") ;
         listview.setAdapter(listViewAdapter) ;
-//        listViewAdapter.addItem("박효완스","3600원", "서울시 광진구 뚝섬유원지역") ;
-
-
+        listViewAdapter.addItem("박효완탕수육","4,200원", "17.08.29 22:14") ;
+        listViewAdapter.addItem("감태균탕수육","5,200원", "17.08.28 22:14") ;
+        listViewAdapter.addItem("육문수탕수육","6,200원", "17.08.27 22:14") ;
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

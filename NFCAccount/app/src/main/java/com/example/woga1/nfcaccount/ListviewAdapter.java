@@ -44,7 +44,7 @@ public class ListviewAdapter  extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         TextView seller = (TextView) convertView.findViewById(R.id.seller) ;
         TextView money = (TextView) convertView.findViewById(R.id.money) ;
-        TextView address = (TextView) convertView.findViewById(R.id.address) ;
+        TextView time = (TextView) convertView.findViewById(R.id.time) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         List_item listViewItem = listViewItemList.get(position);
@@ -52,7 +52,7 @@ public class ListviewAdapter  extends BaseAdapter {
         // 아이템 내 각 위젯에 데이터 반영
         seller.setText(listViewItem.getSeller());
         money.setText(listViewItem.getMoney());
-        address.setText(listViewItem.getAddress());
+        time.setText(listViewItem.getTime());
 
         return convertView;
     }
@@ -74,12 +74,13 @@ public class ListviewAdapter  extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String seller, String money, String address) {
+    public void addItem(String seller, String money, String time) {
         List_item item  = new List_item();
 
         item.setSeller(seller);
         item.setMoney(money);
-        item.setAddress(address);
+        item.setTime(time);
+
 
         listViewItemList.add(item);
     }

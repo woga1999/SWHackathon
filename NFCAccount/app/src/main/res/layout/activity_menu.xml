@@ -9,28 +9,31 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:orientation="vertical">
 
-        <EditText
+        <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_weight="1"
-            android:background="@null"
+            android:background="#1B7EC1"
             android:gravity="center"
             android:text="손장원님 환영합니다."
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:layout_weight="1"
+            android:background="#EAEAEA"
             android:gravity="center"
             android:text="스마트폰을 NFC에 접촉시켜주세요"
+            android:textColor="#000000"
+            android:textStyle="bold"
             android:textSize="15dp" />
 
     </LinearLayout>

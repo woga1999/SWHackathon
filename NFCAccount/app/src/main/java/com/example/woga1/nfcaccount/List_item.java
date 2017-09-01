@@ -8,7 +8,7 @@ public class List_item {
 
     private String seller ;
     private String money ;
-    private String address ;
+    private String time ;
 
     public void setSeller(String sellerParam) {
         seller = sellerParam ;
@@ -16,8 +16,8 @@ public class List_item {
     public void setMoney(String moneyParam) {
         money = moneyParam ;
     }
-    public void setAddress(String addressParam) {
-        address = addressParam ;
+    public void setTime(String timeParam) {
+        time = timeParam ;
     }
 
     public String getSeller() {
@@ -27,8 +27,8 @@ public class List_item {
         return this.money ;
     }
 
-    public String getAddress() {
-        return this.address ;
+    public String getTime() {
+        return this.time ;
     }
 
 
